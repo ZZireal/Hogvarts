@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 220088581353cd642bec0954a60524a1
+  - enabled: 1
+    path: Assets/Scenes/Game.unity
+    guid: 782dc8c36d8eb2c44b30d972ea40670b
+  - enabled: 1
+    path: Assets/Scenes/DuelClub.unity
+    guid: 51fa1054d2853104fbd1e2cc1ae117f3
+  - enabled: 1
+    path: Assets/Scenes/DuelZone.unity
+    guid: fc84a07419c9c9448a5c16c4174b4f45
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 40f64fb2a450f064b8cb7cee58ac213a, type: 2}
