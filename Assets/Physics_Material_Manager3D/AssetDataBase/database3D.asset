@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fd452c498db00441a54a37cccf21717, type: 3}
+  m_Name: database3D
+  m_EditorClassIdentifier: 
+  gravity: {x: 0, y: -9.8, z: 0}
+  physicsMaterials3D:
+  - physicMaterial: {fileID: 13400000, guid: 6629493c285a09e4bb33773cefbc3250, type: 2}
+    dynamicFriction: 0
+    staticFriction: 0
+    bounciness: 1
+    frictionCombine: 0
+    bounceCombine: 0
+  - physicMaterial: {fileID: 13400000, guid: 9dd6824b4b4351148b20a4fd24f50f68, type: 2}
+    dynamicFriction: 0.308
+    staticFriction: 0
+    bounciness: 0.946
+    frictionCombine: 0
+    bounceCombine: 0
+  - physicMaterial: {fileID: 13400000, guid: 8a45576dfa0dad4458756e255d172e90, type: 2}
+    dynamicFriction: 0
+    staticFriction: 0
+    bounciness: 1
+    frictionCombine: 0
+    bounceCombine: 0
+  - physicMaterial: {fileID: 13400000, guid: e1f2f3202f6412945b2caf76b00c0702, type: 2}
+    dynamicFriction: 0
+    staticFriction: 0
+    bounciness: 0
+    frictionCombine: 0
+    bounceCombine: 0
+  - physicMaterial: {fileID: 13400000, guid: eb64214e816f0ba4387e6de2487b215c, type: 2}
+    dynamicFriction: 0
+    staticFriction: 0
+    bounciness: 0
+    frictionCombine: 0
+    bounceCombine: 0

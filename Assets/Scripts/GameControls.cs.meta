@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 45cddb9d74833c545b8f362858467c2b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - inkJSON: {fileID: 4900000, guid: 760fdaf19dac74b43854f2e8c8cf8063, type: 3}
+  - storyText: {fileID: 4260497941152161023, guid: 5823b3d46ba2b5849b76337e5590422d, type: 3}
+  - buttonPrefab: {fileID: 2674834927810582206, guid: 07a600b254224e64088cd13e056e3ff5, type: 3}
+  - scrollView: {fileID: 9110870420362487681, guid: 527f1ab8cf63d154683232d11d183ae8, type: 3}
+  - choicePanelPrefab: {fileID: 6632260186288707158, guid: 426ad133624c24b40b5b6f263966ee7e, type: 3}
+  - scrollRect: {fileID: 9110870420362487683, guid: 527f1ab8cf63d154683232d11d183ae8, type: 3}
+  - textRectTransform: {fileID: 4260497941152161016, guid: 5823b3d46ba2b5849b76337e5590422d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
