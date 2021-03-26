@@ -203,6 +203,6 @@ public class AccountControls : MonoBehaviour
 
     private string GetNewPlayerJson()
     {
-        return JsonUtility.ToJson(new Player("0", "0", "0", "0", "не распределен"));
+        return JsonUtility.ToJson(new Player("0", "0", "0", "0", "не распределен", "0"));
     }
 }

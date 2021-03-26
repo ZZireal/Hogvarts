@@ -37,6 +37,88 @@ public class GameControls : MonoBehaviour
     public Text playerKindness;
     public Text playerFaculty;
 
+    private int pointsBefore = 0;
+    private int pointsFirebase = 0;
+
+    private async void ResetFacultiesPoints()
+    {
+        string faculty = "";
+        int myPoints = 0;
+
+        await FirebaseDatabase.DefaultInstance.GetReference("players").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId)
+          .GetValueAsync().ContinueWith(task =>
+          {
+              if (task.IsFaulted)
+              {
+              }
+              else if (task.IsCompleted)
+              {
+                  DataSnapshot snapshot = task.Result;
+                  myPoints = Convert.ToInt32(snapshot.Child("points").Value);
+                  faculty = GetFacultyKeyFromName((snapshot.Child("faculty").Value).ToString());
+              }
+          });
+
+        await FirebaseDatabase.DefaultInstance.GetReference("facultiesPoints").Child(faculty)
+            .GetValueAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                }
+                else if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+                    pointsFirebase = Convert.ToInt32(snapshot.Value);
+                }
+            });
+
+        Debug.LogFormat("Points now: ", myPoints);
+        Debug.LogFormat("Faculty now: ", faculty);
+
+        if (myPoints != 0)
+        {
+            await FirebaseDatabase.DefaultInstance.GetReference("facultiesPoints").Child(faculty)
+              .GetValueAsync().ContinueWith(task =>
+              {
+                  if (task.IsFaulted)
+                  {
+                  }
+                  else if (task.IsCompleted)
+                  {
+                      DataSnapshot snapshot = task.Result;
+                      pointsFirebase = Convert.ToInt32(snapshot.Value);
+                  }
+              });
+
+            await FirebaseDatabase.DefaultInstance.RootReference.Child("facultiesPoints").Child(faculty).SetRawJsonValueAsync((pointsFirebase - myPoints).ToString());
+        }
+    }
+
+    private async void SetFacultiesPoints()
+    {
+        string faculty = GetFacultyKeyFromName(story.variablesState["faculty"].ToString());
+
+        int differencePoints = Convert.ToInt32(story.variablesState["points"]) - pointsBefore;
+
+        if (differencePoints != 0)
+        {
+            await FirebaseDatabase.DefaultInstance.GetReference("facultiesPoints").Child(faculty)
+              .GetValueAsync().ContinueWith(task =>
+              {
+                  if (task.IsFaulted)
+                  {
+                  }
+                  else if (task.IsCompleted)
+                  {
+                      DataSnapshot snapshot = task.Result;
+                      pointsFirebase = Convert.ToInt32(snapshot.Value);
+                  }
+              });
+
+            await FirebaseDatabase.DefaultInstance.RootReference.Child("facultiesPoints").Child(faculty).SetRawJsonValueAsync((pointsFirebase + differencePoints).ToString());
+        }
+    }
+
     async void CheckUserSaved()
     {
         bool isSave = false;
@@ -82,6 +164,7 @@ public class GameControls : MonoBehaviour
 
     private void PrepareNewGame()
     {
+        ResetFacultiesPoints();
         RedistributePlayer();
         SaveStoryProgress();
     }
@@ -104,7 +187,8 @@ public class GameControls : MonoBehaviour
             story.variablesState["cunning"].ToString(),
             story.variablesState["intelligence"].ToString(),
             story.variablesState["kindness"].ToString(),
-            story.variablesState["faculty"].ToString()));
+            story.variablesState["faculty"].ToString(),
+            story.variablesState["points"].ToString()));
     }
 
     private void SavePlayerParameters()
@@ -262,6 +346,7 @@ public class GameControls : MonoBehaviour
 
             choiceButton.onClick.AddListener(delegate
             {
+                pointsBefore = Convert.ToInt32(story.variablesState["points"]);
                 ChooseStoryChoice(choice);
             });
         }
@@ -292,6 +377,7 @@ public class GameControls : MonoBehaviour
     {
         story.ChooseChoiceIndex(choice.index);
         RefreshTextAndChoicePanel();
+        SetFacultiesPoints();
 
         RedistributePlayer();
         SaveStoryProgress();
