@@ -84,6 +84,7 @@ public class StatisticsControls : MonoBehaviour
               else if (task.IsCompleted)
               {
                   DataSnapshot snapshot = task.Result;
+
                   playersGryffindorString = snapshot.Child("gryffindor").Value.ToString();
                   playersSlytherinString = snapshot.Child("slytherin").Value.ToString();
                   playersRavenklowString = snapshot.Child("ravenklow").Value.ToString();
@@ -114,6 +115,7 @@ public class StatisticsControls : MonoBehaviour
                 else if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
+                   
                     userFacultyString = snapshot.Child("faculty").Value.ToString();
                     userBraveryString = snapshot.Child("bravery").Value.ToString();
                     userCunningString = snapshot.Child("cunning").Value.ToString();

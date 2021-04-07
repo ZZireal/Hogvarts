@@ -117,6 +117,7 @@ public class AccountControls : MonoBehaviour
         {
             ShowErrorToast();
         }
+
         signPasswordField.text = "";
     }
 
@@ -186,6 +187,7 @@ public class AccountControls : MonoBehaviour
 
     private async void PrepareNewPlayer()
     {
+
         await FirebaseDatabase.DefaultInstance.RootReference.Child("players").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).SetRawJsonValueAsync(GetNewPlayerJson());
         await FirebaseDatabase.DefaultInstance.GetReference("faculties").Child("noFaculty")
           .GetValueAsync().ContinueWith(task =>

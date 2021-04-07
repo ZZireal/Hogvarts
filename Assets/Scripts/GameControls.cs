@@ -72,9 +72,6 @@ public class GameControls : MonoBehaviour
                 }
             });
 
-        Debug.LogFormat("Points now: ", myPoints);
-        Debug.LogFormat("Faculty now: ", faculty);
-
         if (myPoints != 0)
         {
             await FirebaseDatabase.DefaultInstance.GetReference("facultiesPoints").Child(faculty)
@@ -166,10 +163,21 @@ public class GameControls : MonoBehaviour
     {
         ResetFacultiesPoints();
         RedistributePlayer();
-        SaveStoryProgress();
+        DeleteStoryProgress();
     }
 
-    private void SaveStoryProgress()
+    private async void DeleteStoryProgress()
+    {
+        if (!internetConnectionControls.IsInternetConnection())
+        {
+            UnityAndroidExtras.instance.makeToast("Ошибка! Отсутствует интернет-сосединение. Ваш прогресс не будет сохранен.", 0);
+            return;
+        }
+
+        await FirebaseDatabase.DefaultInstance.RootReference.Child("saves").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).RemoveValueAsync();
+    }
+
+    private async void SaveStoryProgress()
     {
         if (!internetConnectionControls.IsInternetConnection())
         {
@@ -177,8 +185,8 @@ public class GameControls : MonoBehaviour
             return;
         }
         string saved = story.state.ToJson() + "";
-        FirebaseDatabase.DefaultInstance.RootReference.Child("saves").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("state").SetValueAsync(saved);
-        FirebaseDatabase.DefaultInstance.RootReference.Child("saves").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("story").SetValueAsync(storyText.text + "");
+
+        await FirebaseDatabase.DefaultInstance.RootReference.Child("saves").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("state").SetValueAsync(saved);
     }
 
     private string GetPlayerJson()
@@ -255,6 +263,7 @@ public class GameControls : MonoBehaviour
         await FirebaseDatabase.DefaultInstance.RootReference.Child("faculties").Child(facultyFirebaseNewKey).SetRawJsonValueAsync(facultyFirebaseNewValue.ToString());
         SavePlayerParameters();
     }
+
     public async void LoadStoryFromSave()
     {
         if (!internetConnectionControls.IsInternetConnection())
@@ -262,22 +271,6 @@ public class GameControls : MonoBehaviour
             internetConnectionControls.ShowInternetConnectionErrorToast();
             SceneManager.LoadScene("MainMenu");
         }
-
-        await FirebaseDatabase.DefaultInstance.GetReference("saves").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("story")
-          .GetValueAsync().ContinueWith(task =>
-          {
-              if (task.IsFaulted)
-              {
-              }
-              else if (task.IsCompleted)
-              {
-                  DataSnapshot snapshot = task.Result;
-                  isDownloadedStory = true;
-                  loadedStoryText = snapshot.Value + "";
-              };
-          });
-
-        storyText.text = loadedStoryText;
 
         await FirebaseDatabase.DefaultInstance.GetReference("saves").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("state")
           .GetValueAsync().ContinueWith(task =>
@@ -289,6 +282,7 @@ public class GameControls : MonoBehaviour
               {
                   DataSnapshot snapshot = task.Result;
                   loadedStoryState = snapshot.Value + "";
+                  isDownloadedStory = true;
               };
           });
 
@@ -320,21 +314,34 @@ public class GameControls : MonoBehaviour
         }
     }
 
+    string RefactoredStoryText(string storyChunk)
+    {
+        string refactoredStoryChunk = "";
+        String[] text = storyChunk.Split(new char[] { '`' }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (string someText in text)
+        {
+            refactoredStoryChunk += someText;
+            refactoredStoryChunk += "\n\n";
+        }
+        
+        return refactoredStoryChunk;
+    }
+
     void RefreshTextAndChoicePanel()
     {
         EraseChoicePanel();
 
-        // GameObject newChoiceView = Instantiate(choiceViewPrefab) as GameObject;
-        // newChoiceView.transform.SetParent(this.transform, false);
-
         if (isDownloadedStory)
         {
-            storyText.text = loadedStoryText;
+            storyText.text = RefactoredStoryText(story.currentText);
             isDownloadedStory = false;
         }
+
         else
         {
-            storyText.text = LoadStoryChunk();
+            string s = LoadStoryChunk();
+            storyText.text = RefactoredStoryText(s);
         }
 
         foreach (Choice choice in story.currentChoices)
