@@ -36,6 +36,8 @@ public class GameControls : MonoBehaviour
     public Text playerIntelligence;
     public Text playerKindness;
     public Text playerFaculty;
+    public Text playerGalleons;
+    public Text playerPoints;
 
     private int pointsBefore = 0;
     private int pointsFirebase = 0;
@@ -184,6 +186,7 @@ public class GameControls : MonoBehaviour
             UnityAndroidExtras.instance.makeToast("Ошибка! Отсутствует интернет-сосединение. Ваш прогресс не будет сохранен.", 0);
             return;
         }
+
         string saved = story.state.ToJson() + "";
 
         await FirebaseDatabase.DefaultInstance.RootReference.Child("saves").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).Child("state").SetValueAsync(saved);
@@ -196,7 +199,8 @@ public class GameControls : MonoBehaviour
             story.variablesState["intelligence"].ToString(),
             story.variablesState["kindness"].ToString(),
             story.variablesState["faculty"].ToString(),
-            story.variablesState["points"].ToString()));
+            story.variablesState["galleons"].ToString(),
+        story.variablesState["points"].ToString()));
     }
 
     private void SavePlayerParameters()
@@ -204,7 +208,8 @@ public class GameControls : MonoBehaviour
         FirebaseDatabase.DefaultInstance.RootReference.Child("players").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).SetRawJsonValueAsync(GetPlayerJson());
     }
 
-    private async void RedistributePlayer() {
+    private async void RedistributePlayer()
+    {
         string facultyFirebaseNewKey = "";
         int facultyFirebaseNewValue = 0;
 
@@ -324,7 +329,7 @@ public class GameControls : MonoBehaviour
             refactoredStoryChunk += someText;
             refactoredStoryChunk += "\n\n";
         }
-        
+
         return refactoredStoryChunk;
     }
 
@@ -412,6 +417,8 @@ public class GameControls : MonoBehaviour
         playerIntelligence.text = "Интеллект: " + story.variablesState["intelligence"];
         playerKindness.text = "Мягкость: " + story.variablesState["kindness"];
         playerFaculty.text = "Факультет: " + story.variablesState["faculty"];
+        playerGalleons.text = "Галлеонов: " + story.variablesState["galleons"];
+        playerPoints.text = "Заработано баллов: " + story.variablesState["points"];
     }
 
     string LoadStoryChunk()

@@ -110,7 +110,6 @@ public class AccountControls : MonoBehaviour
                 }
 
                 Firebase.Auth.FirebaseUser newUser = task.Result;
-                if (IsUserLogined()) FirebaseAuth.DefaultInstance.SignOut();
             });
         }
         catch (Exception ex)
@@ -187,7 +186,6 @@ public class AccountControls : MonoBehaviour
 
     private async void PrepareNewPlayer()
     {
-
         await FirebaseDatabase.DefaultInstance.RootReference.Child("players").Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId).SetRawJsonValueAsync(GetNewPlayerJson());
         await FirebaseDatabase.DefaultInstance.GetReference("faculties").Child("noFaculty")
           .GetValueAsync().ContinueWith(task =>
@@ -201,10 +199,12 @@ public class AccountControls : MonoBehaviour
                   FirebaseDatabase.DefaultInstance.RootReference.Child("faculties").Child("noFaculty").SetRawJsonValueAsync((Convert.ToInt32(snapshot.Value) + 1).ToString());
               }
           });
+
+        if (IsUserLogined()) FirebaseAuth.DefaultInstance.SignOut();
     }
 
     private string GetNewPlayerJson()
     {
-        return JsonUtility.ToJson(new Player("0", "0", "0", "0", "не распределен", "0"));
+        return JsonUtility.ToJson(new Player("0", "0", "0", "0", "не распределен", "0", "0"));
     }
 }

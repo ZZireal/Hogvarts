@@ -12,7 +12,6 @@ public class DuelClubManager : MonoBehaviourPunCallbacks
     public Text logText;
     public GameObject createDuelZoneButton;
     public GameObject joinDuelZoneButton;
-
     public void LoadMainMenu()
     {
         PhotonNetwork.Disconnect();
@@ -46,16 +45,13 @@ public class DuelClubManager : MonoBehaviourPunCallbacks
 
     private IEnumerator ControlInternetConnectionl()
     {
-        Debug.Log("in corutine");
         if (internetConnectionControls.IsInternetConnection())
         {
-            Debug.Log("internet yes");
             yield return new WaitForSeconds(2f);
             StartCoroutine(ControlInternetConnectionl());
         }
         else
         {
-            Debug.Log("internet no");
             PhotonNetwork.Disconnect();
             SceneManager.LoadScene("MainMenu");
             internetConnectionControls.ShowInternetConnectionErrorToast();
@@ -64,6 +60,10 @@ public class DuelClubManager : MonoBehaviourPunCallbacks
 
     private IEnumerator ToggleIsRoomToConnectReady()
     {
+        if (PhotonNetwork.CountOfPlayersInRooms % 2 != 0) Debug.Log("There is room!");
+        if (PhotonNetwork.CountOfPlayersInRooms % 2 == 0) Debug.Log("There is no room!");
+        Debug.Log(PhotonNetwork.CountOfPlayersInRooms);
+
         joinDuelZoneButton.SetActive(PhotonNetwork.CountOfPlayersInRooms % 2 != 0);
         yield return new WaitForSeconds(1f);
         StartCoroutine(ToggleIsRoomToConnectReady());

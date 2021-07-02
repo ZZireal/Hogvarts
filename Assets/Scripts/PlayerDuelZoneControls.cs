@@ -58,19 +58,12 @@ public class PlayerDuelZoneControls : MonoBehaviour
     [PunRPC]
     private void CreateShotCoroutine(float rotation, Vector3 position)
     {
-        Debug.Log("Inside PunRPC function!");
-        Debug.Log("Rotation: ");
-        Debug.Log(rotation);
-        Debug.Log("Position: ");
-        Debug.Log(position);
         StartCoroutine(CreateShot(rotation, position));
     }
 
     [PunRPC]
     private IEnumerator CreateShot(float rotation, Vector3 position)
     {
-        Debug.Log("Inside Coroutine of PunRPC function!");
-       //GameObject shot1 = PhotonNetwork.Instantiate(shotPrefab.name, position + new Vector3(rotation * 0.5f, 0, 0), Quaternion.identity);
         GameObject shot = Instantiate(shotPrefab, position + new Vector3(rotation * 0.5f, 0, 0), Quaternion.identity);
         Rigidbody2D rigidbody2DShot = shot.GetComponent<Rigidbody2D>();
         rigidbody2DShot.AddForce(new Vector2(rotation * 8f, 0), ForceMode2D.Impulse);

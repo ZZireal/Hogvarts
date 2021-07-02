@@ -7,6 +7,7 @@ using Firebase.Auth;
 public class MainMenuControls : MonoBehaviour
 {
     public InternetConnectionControls internetConnectionControls;
+    public GameObject emailCanvas;
     public GameObject statisticsButton;
     public GameObject accountButton;
     public GameObject playButton;
@@ -35,6 +36,7 @@ public class MainMenuControls : MonoBehaviour
         }
         else
         {
+            emailCanvas.SetActive(true);
             UnityAndroidExtras.instance.makeToast("Пожалуйста, авторизуйтесь, чтобы играть!", 0);
         }
     }

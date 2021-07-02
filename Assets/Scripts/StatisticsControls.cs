@@ -22,6 +22,9 @@ public class StatisticsControls : MonoBehaviour
     public Text userIntelligence;
     public Text userKindness;
     public Text userFaculty;
+    public Text userPoints;
+    public Text userGalleons;
+    public Text userReputation;
 
     public GameObject loadingCanvas;
 
@@ -36,6 +39,9 @@ public class StatisticsControls : MonoBehaviour
     private string userCunningString;
     private string userIntelligenceString;
     private string userKindnessString;
+    private string userPointsString;
+    private string userGalleonsString;
+    private string userReputationString;
 
     public void ShowCanvasStatistics()
     {
@@ -57,6 +63,8 @@ public class StatisticsControls : MonoBehaviour
         }
 
         SetUserAndFacultyStatistics();
+        canvasStatistics.SetActive(true);
+
     }
 
     public void CloseCanvasStatistics()
@@ -89,10 +97,10 @@ public class StatisticsControls : MonoBehaviour
                   playersSlytherinString = snapshot.Child("slytherin").Value.ToString();
                   playersRavenklowString = snapshot.Child("ravenklow").Value.ToString();
                   playersHufflpufString = snapshot.Child("hufflpuf").Value.ToString();
-                  playersAllString = 
+                  playersAllString =
                   (Convert.ToInt32(playersGryffindorString) +
-                  Convert.ToInt32(playersSlytherinString) + 
-                  Convert.ToInt32(playersRavenklowString) + 
+                  Convert.ToInt32(playersSlytherinString) +
+                  Convert.ToInt32(playersRavenklowString) +
                   Convert.ToInt32(playersHufflpufString)).ToString();
                   ;
               };
@@ -115,12 +123,15 @@ public class StatisticsControls : MonoBehaviour
                 else if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-                   
+
                     userFacultyString = snapshot.Child("faculty").Value.ToString();
                     userBraveryString = snapshot.Child("bravery").Value.ToString();
                     userCunningString = snapshot.Child("cunning").Value.ToString();
                     userKindnessString = snapshot.Child("kindness").Value.ToString();
                     userIntelligenceString = snapshot.Child("intelligence").Value.ToString();
+                    userPointsString = snapshot.Child("points").Value.ToString();
+                    userGalleonsString = snapshot.Child("galleons").Value.ToString();
+                    userReputationString = "0";
                 }
             });
 
@@ -129,9 +140,11 @@ public class StatisticsControls : MonoBehaviour
             userCunning.text = userCunningString;
             userKindness.text = userKindnessString;
             userIntelligence.text = userIntelligenceString;
+            userPoints.text = userPointsString;
+            userGalleons.text = userGalleonsString;
+            userReputation.text = userReputationString;
         }
 
-        canvasStatistics.SetActive(true);
         loadingCanvas.SetActive(false);
     }
 }

@@ -22,11 +22,11 @@ public class ShotTriggerControls : MonoBehaviourPunCallbacks
         if (other.CompareTag("Player"))
         {
             if (!other.GetComponent<PhotonView>().IsMine) return;
-            Debug.Log("Player trigger");
+
             PlayerDuelZoneControls player = other.GetComponent<PlayerDuelZoneControls>();
             player.LessPlayerHealth(shootingPower);
+
             player.ChangePlayerHealthBar();
-            Debug.Log("Player health: " + player.GetPlayerHealth());
             if (player.GetPlayerHealth() <= 0) PhotonNetwork.LeaveRoom();
             Destroy(gameObject);
         }
